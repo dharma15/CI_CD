@@ -18,23 +18,28 @@ steps{
     """ 
 }
 }
+stage('User Input') {
+    steps {
+        input message: 'User input required', ok: 'Release!',
+            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
+        echo "env: ${env.RELEASE_SCOPE}"
+        echo "params: ${params.RELEASE_SCOPE}"
+    }
+}
 stage ('BUILD'){
+
 steps{
+    
     sh """
+     
       cd $CLONE_DIR 
       javac HelloWorld/Main.java
       jar -cfm Main.jar Mainfest.mf  HelloWorld/Main.class
      """
 }
 }
-/*
-stage('Test'){
-            steps {
-                sh 'make check'
-                junit 'reports/**/*.xml' 
-            }
-        }
-*/
+
+
 stage('Deploy') { 
     	 input{
       message "Press Enter directory name for deploy"
@@ -45,7 +50,7 @@ stage('Deploy') {
      }
 
 	steps{
-        sh 'Deployment'
+        sh 'cp $CLONE_DIR/Main.jar $directory'
 }
 }
 }

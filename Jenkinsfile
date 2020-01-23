@@ -23,8 +23,7 @@ steps{
     sh """
       cd $CLONE_DIR 
       javac HelloWorld/Main.java
-      java -cp . HelloWorld.Main
-      jar -cfm Main.jar Mainfest.mf HelloWorld.Main HelloWorld/Main.class
+      jar -cfm Main.jar Mainfest.mf  HelloWorld/Main.class
      """
 }
 }

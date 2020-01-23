@@ -6,6 +6,12 @@ environment {
 stages {
 
 stage ('Clone GIT Repo'){
+ input{
+        message "Press Enter directory name for deploy"
+ 
+        parameters {
+        string(name:'clone_dir', defaultValue: '', description: 'Directory name for deployment')
+
 steps{
     sh """
      if [ -d $CLONE_DIR ];then
@@ -13,7 +19,7 @@ steps{
         /usr/cisco/bin/git clean -fxd
         /usr/cisco/bin/git pull origin master
      else
-     /usr/cisco/bin/git clone git@github5.cisco.com:ccbu-test/sample_project.git -b master $CLONE_DIR
+     /usr/cisco/bin/git clone git@github.com:dharma15/CI_CDt -b master $clone_dir
     fi
     """ 
 }
@@ -32,7 +38,7 @@ steps{
     
     sh """
      
-      cd $CLONE_DIR 
+      cd $clone_dir 
       javac HelloWorld/Main.java
       jar -cfm Main.jar Mainfest.mf  HelloWorld/Main.class
      """
@@ -50,7 +56,7 @@ stage('Deploy') {
      }
 
 	steps{
-        sh 'cp $CLONE_DIR/Main.jar $directory'
+        sh 'cp $clone_dir/Main.jar $directory'
 }
 }
 }
